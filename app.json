@@ -1,0 +1,30 @@
+{
+    "name": "Binance Wallet Fiat Spot",
+    "description": "Get your binance wallet fiat and spot",
+    "repository": "https://github.com/cryptoyell/binance-wallet-fiat-spot-api",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/5/57/Binance_Logo.png",
+    "keywords": [
+        "laravel",
+        "php",
+        "binance"
+    ],
+    "env": {
+        "APP_DEBUG": {
+            "description": "Enables or disables debug mode.",
+            "value": "true"    
+        },
+        "APP_ENV": {
+            "description": "Enables or disables debug mode.",
+            "value": "local"   
+        },
+        "APP_KEY": {
+            "description": "Generate a new one using artisan key:generate --show or modify existing one: 'base64:Eft9fVVUBKpAM6zCdt6hF1SdaHsugU8KDdSUrt4usqo='"
+        },
+        "BINANCE_API_KEY": {
+            "description": "Your binance API KEY"
+        },
+        "BINANCE_SECRET_KEY": {
+            "description": "Your binance secret key"
+        }
+    }
+}
