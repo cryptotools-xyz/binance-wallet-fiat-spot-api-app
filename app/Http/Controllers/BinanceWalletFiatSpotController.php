@@ -8,19 +8,29 @@ class BinanceWalletFiatSpotController extends BinanceController
 {
     public function index()
     {
-        $publicKey = $this->binance_api_key;
-        $secretKey = $this->binance_secret_key;
+        $validated = request()->validate([
+            'password' => 'required'
+        ]);
 
-        $timestamp = round(microtime(true) * 1000);
+        if(env('PASSWORD') === request()->password) {
+            
+            $publicKey = $this->binance_api_key;
+            $secretKey = $this->binance_secret_key;
 
-        $parameters['timestamp'] = $timestamp;
-        $query = $this->buildQuery($parameters);
-        $signature = $this->signature($query, $secretKey);
+            $timestamp = round(microtime(true) * 1000);
 
-        $response = Http::withHeaders([
-            'X-MBX-APIKEY' => $publicKey
-        ])->get("https://api.binance.com/api/v3/account?timestamp=$timestamp&signature=$signature");
+            $parameters['timestamp'] = $timestamp;
+            $query = $this->buildQuery($parameters);
+            $signature = $this->signature($query, $secretKey);
 
-        return $response->json();
+            $response = Http::withHeaders([
+                'X-MBX-APIKEY' => $publicKey
+            ])->get("https://api.binance.com/api/v3/account?timestamp=$timestamp&signature=$signature");
+
+            return $response->json();
+
+        } else {
+            return response()->json(['error' => 'Unauthenticated.'], 401);
+        }        
     }
 }
