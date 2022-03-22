@@ -20,3 +20,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('/wallet/fiat-spot', [BinanceWalletFiatSpotController::class, 'index']);
+
+Route::get('/test/deposit-history/{coin}', [BinanceWalletFiatSpotController::class, 'deposit']);
