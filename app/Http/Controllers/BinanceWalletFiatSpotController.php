@@ -47,6 +47,7 @@ class BinanceWalletFiatSpotController extends BinanceController
 
             $timestamp = round(microtime(true) * 1000);
 
+            $parameters['coin'] = $coin;
             $parameters['timestamp'] = $timestamp;
             $query = $this->buildQuery($parameters);
             $signature = $this->signature($query, $secretKey);
@@ -56,7 +57,7 @@ class BinanceWalletFiatSpotController extends BinanceController
             ])->get("https://api.binance.com/sapi/v1/capital/deposit/hisrec?coin=$coin&timestamp=$timestamp&signature=$signature");
 
             return $response->json();
-            
+
         } else {
             return response()->json(['error' => 'Unauthenticated.'], 401);
         }        
