@@ -33,4 +33,35 @@ class BinanceWalletFiatSpotController extends BinanceController
             return response()->json(['error' => 'Unauthenticated.'], 401);
         }        
     }
+
+    public function deposit($coin)
+    {
+        $transactionType = 0;
+
+        $validated = request()->validate([
+            'password' => 'required'
+        ]);
+
+        if(env('PASSWORD') === request()->password) {
+
+            $publicKey = $this->binance_api_key;
+            $secretKey = $this->binance_secret_key;
+
+            $timestamp = round(microtime(true) * 1000);
+
+            $parameters['transactionType'] = $transactionType;
+            $parameters['timestamp'] = $timestamp;
+            $query = $this->buildQuery($parameters);
+            $signature = $this->signature($query, $secretKey);
+
+            $response = Http::withHeaders([
+                'X-MBX-APIKEY' => $publicKey
+            ])->get("https://api.binance.com/sapi/v1/fiat/orders?transactionType=$transactionType&timestamp=$timestamp&signature=$signature");
+
+            return $response->json();
+
+        } else {
+            return response()->json(['error' => 'Unauthenticated.'], 401);
+        }        
+    }
 }
