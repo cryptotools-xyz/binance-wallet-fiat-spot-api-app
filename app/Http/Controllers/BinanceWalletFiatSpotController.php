@@ -36,6 +36,8 @@ class BinanceWalletFiatSpotController extends BinanceController
 
     public function deposit($coin)
     {
+        $transactionType = 0;
+
         $validated = request()->validate([
             'password' => 'required'
         ]);
@@ -47,13 +49,14 @@ class BinanceWalletFiatSpotController extends BinanceController
 
             $timestamp = round(microtime(true) * 1000);
 
+            $parameters['transactionType'] = $transactionType;
             $parameters['timestamp'] = $timestamp;
             $query = $this->buildQuery($parameters);
             $signature = $this->signature($query, $secretKey);
 
             $response = Http::withHeaders([
                 'X-MBX-APIKEY' => $publicKey
-            ])->get("https://api.binance.com/sapi/v1/fiat/orders?transactionType=0&timestamp=$timestamp&signature=$signature");
+            ])->get("https://api.binance.com/sapi/v1/fiat/orders?transactionType=$transactionType&timestamp=$timestamp&signature=$signature");
 
             return $response->json();
 
